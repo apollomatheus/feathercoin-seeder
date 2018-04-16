@@ -339,18 +339,16 @@ extern "C" void* ThreadStats(void*) {
   } while(1);
 }
 
-static const string mainnet_seeds[] = {"dnsseed.feathercoin.com", "dnsseed.alltheco.in", "explorer2.feathercoin.com", "block.ftc-c.com", "dnsseed-static.feathercoin.ch", ""};
-static const string testnet_seeds[] = {"testnet-dnsseed.feathercoin.com", ""};
+static const string mainnet_seeds[] = {""};
+static const string testnet_seeds[] = {""};
 static const string *seeds = mainnet_seeds;
 
 extern "C" void* ThreadSeeder(void*) {
-  if (!fTestNet){
-    db.Add(CService("kjy2eqzk4zwi5zd3.onion", 9336), true);
-  }
   do {
     for (int i=0; seeds[i] != ""; i++) {
       vector<CNetAddr> ips;
       LookupHost(seeds[i].c_str(), ips);
+      printf("Seed %s\n",seeds[i].c_str());
       for (vector<CNetAddr>::iterator it = ips.begin(); it != ips.end(); it++) {
         db.Add(CService(*it, GetDefaultPort()), true);
       }
